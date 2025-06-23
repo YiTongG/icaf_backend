@@ -18,7 +18,7 @@ describe('Artwork API Tests', () => {
     sport: 'Basketball',
     location: 'New York',
     is_ai_gen: false,
-    model: 'GPT-Art',
+    model: 'Art',
     prompt: 'A child playing basketball',
     file_type: 'jpg',
   };

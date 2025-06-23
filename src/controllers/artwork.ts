@@ -6,8 +6,6 @@ export const ArtworkController = {
     try {
       const { artworkSk } = req.params;
       const artwork = await ArtworkService.getArtworkBySk(artworkSk);
-      console.log('Artwork returned:', artwork); // ← 添加这行调试
-
       res.json(artwork);
     } catch (error) {
       res.status(404).json({ error: 'Artwork not found' });
@@ -58,8 +56,6 @@ export const ArtworkController = {
     try {
       const { userSk } = req.body;
       const { artworkSk } = req.params;
-      console.log(userSk)
-      console.log(artworkSk)
       const result = await ArtworkService.handleVote(userSk, artworkSk);
       res.json(result);
     } catch (error) {

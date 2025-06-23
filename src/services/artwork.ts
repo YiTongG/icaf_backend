@@ -32,8 +32,6 @@ export const ArtworkService = {
 
   async getArtworkBySk(sk: string) {
     const result = await ArtworkModel.getArtworkById(sk);
-    console.log(result)
-
     if (!result?.Item) throw new Error('Artwork not found');
     return result.Item;
   },
@@ -63,7 +61,6 @@ export const ArtworkService = {
   },
    async  handleVote(userSk: string, artworkSk: string) {
     const userData = await UserModel.getUserBySk(userSk);
-    console.log(userData)
     if (!userData?.Item) {
       throw new Error("User not found");
     }

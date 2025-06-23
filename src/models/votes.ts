@@ -1,6 +1,6 @@
 let totalVotes = 0;
 
-export const MockVoteModel = {
+export const VoteModel = {
   async getTotalVotes() {
     return {
       Item: {
