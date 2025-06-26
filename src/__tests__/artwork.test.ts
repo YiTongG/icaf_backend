@@ -84,6 +84,12 @@ describe('Artwork API Tests', () => {
     expect(res.statusCode).toBe(200);
   });
 
+  test('GET /api/votes - should return total votes', async () => {
+    const res = await request(app).get('/api/votes');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('votes', 1);
+  });
+
   test('DELETE /api/artworks/:artworkSk - should delete artwork', async () => {
     //testArtworkSk = '123e4567-e89b-12d3-a456-426614174000'
 
