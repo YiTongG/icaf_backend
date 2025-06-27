@@ -1,5 +1,5 @@
 import { ArtworkModel } from '../models/artwork';
-import { UserModel } from '../models/user';
+import { UserModel } from "../models/user";
 import { v4 as uuidv4 } from 'uuid';
 
 export const ArtworkService = {
@@ -45,6 +45,7 @@ export const ArtworkService = {
     await ArtworkModel.deleteArtworkById(sk);
     return { message: 'Artwork deleted' };
   },
+
 
   async voteArtwork(sk: string, userSk: string) {
     const user = await UserModel.getUserBySk(userSk);

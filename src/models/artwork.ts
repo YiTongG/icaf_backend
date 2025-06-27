@@ -29,6 +29,18 @@ export const ArtworkModel = {
     delete artworks[artworkSk];
   },
 
+
+  async  deleteArtworkCompletely(artworkS: string) {
+    try {
+      //todo 
+      //await ArtworkModel.deleteArtworkAndFiles(artworkSk);
+
+      return {message: "successfully deleted"};
+    } catch(error) {
+      console.log(error);
+    }
+  },
+
   async incrementVoteArtworkById(artworkSk: string) {
     if (!artworks[artworkSk]) throw new Error('Artwork not found');
     artworks[artworkSk].votes = (artworks[artworkSk].votes || 0) + 1;

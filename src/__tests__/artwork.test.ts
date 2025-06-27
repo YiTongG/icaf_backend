@@ -59,15 +59,12 @@ describe('Artwork API Tests', () => {
   });
 
   test('GET /api/artworks/:artworkSk - should fetch specific artwork', async () => {
-    //testArtworkSk = '123e4567-e89b-12d3-a456-426614174000'
     const res = await request(app).get(`/api/artworks/${testArtworkSk}`);
     expect(res.statusCode).toBe(200);
     expect(res.body).toHaveProperty('sk', testArtworkSk);
   });
 
   test('PATCH /api/artworks/:artworkSk - should approve artwork', async () => {
-    //testArtworkSk = '123e4567-e89b-12d3-a456-426614174000'
-
     const res = await request(app)
       .patch(`/api/artworks/${testArtworkSk}`)
       .send({ is_approved: true });
@@ -76,8 +73,6 @@ describe('Artwork API Tests', () => {
   });
 
   test('PATCH /api/vote/:artworkSk - should add a vote', async () => {
-    //testArtworkSk = '123e4567-e89b-12d3-a456-426614174000'
-
     const res = await request(app)
       .patch(`/api/vote/${testArtworkSk}`)
       .send({ userSk: 'user-1234' }); // adjust to match your logic
@@ -85,9 +80,14 @@ describe('Artwork API Tests', () => {
   });
 
   test('DELETE /api/artworks/:artworkSk - should delete artwork', async () => {
-    //testArtworkSk = '123e4567-e89b-12d3-a456-426614174000'
-
     const res = await request(app).delete(`/api/artworks/${testArtworkSk}`);
     expect(res.statusCode).toBe(200);
   });
+
+  test('GET /api/votes - should return total votes', async () => {
+    const res = await request(app).get('/api/votes');
+    expect(res.statusCode).toBe(200);
+    expect(res.body).toHaveProperty('votes', 1);
+  });
 });
+

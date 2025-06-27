@@ -61,5 +61,7 @@ export const ArtworkController = {
     } catch (error) {
       res.status(400).json({ error: 'Vote failed' });
     }
-  }
+  },
+
+
 };

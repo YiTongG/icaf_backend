@@ -1,5 +1,5 @@
 import express from 'express';
-import { Request, Response, NextFunction, RequestHandler } from "express";
+import * as UserController from './controllers/user';
 import { ArtworkController } from './controllers/artwork';
 import { VotesController } from './controllers/votes';
 import {
@@ -9,15 +9,24 @@ import {
     deleteArtworkValidator,
     voteArtworkValidator,
     validationMiddleware
-  } from '../validators';
-
+  } from '../validators';  
 
 
 export const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-// --- Authentication APIs ---
+
+//--- Authentication APIs ---
+app.get('/api/logout', UserController.logout);
+app.delete("/api/users", UserController.deleteUser);
+app.get("/api/users", UserController.getUser);
+app.get("/api/auth-status", UserController.getAuthStatus);
+app.get("/api/voted", UserController.getUserVoted);
+app.delete("/api/users/user-delete-account", UserController.userDeleteAccount);
+app.get("/api/volunteer/auth-status", UserController.getVolunteerAuthStatus);
+
+
 
 // --- Artwork APIs ---
 app.get('/api/artworks/:artworkSk', getArtworkValidator, validationMiddleware,ArtworkController.getArtwork);
