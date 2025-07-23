@@ -114,15 +114,15 @@ export async function updateUser(userSk: string, updateField: Record<string, any
   }
 }
 
-export async function refundUser(userSk: string) {
-  const userData = await UserModel.getUserBySk(userSk);
+// export async function refundUser(userSk: string) {
+//   const userData = await UserModel.getUserBySk(userSk);
 
-  if (!userData.Item) {
-    throw new Error(`User not found with sk: ${userSk}`);
-  }
+//   if (!userData.Item) {
+//     throw new Error(`User not found with sk: ${userSk}`);
+//   }
 
-  return await UserModel.refundUser(userData.Item.pi_id);
-}
+//   return await UserModel.refundUser(userData.Item.pi_id);
+// }
 
 export async function volunteerUpdateUser(userSk: string, updateField: Record<string, any>) {
   const fieldName = Object.keys(updateField)[0];

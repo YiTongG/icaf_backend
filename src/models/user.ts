@@ -47,11 +47,11 @@ import {
   AdminDeleteUserAttributesCommand,
   AdminDisableUserCommand
 } from "@aws-sdk/client-cognito-identity-provider";
-import Stripe from "stripe";
+// import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SK!, {
-  apiVersion: "2025-05-28.basil",
-});
+// const stripe = new Stripe(process.env.STRIPE_SK!, {
+//   apiVersion: "2025-05-28.basil",
+// });
 
 let tableName = process.env.DYNAMO_TABLE_NAME!;
 if (process.env.ENV && process.env.ENV !== "NONE") {
@@ -227,20 +227,20 @@ export const UserModel = {
     );
   },
 
-  async refundUser(pi_id: string) {
-    const paymentIntent = await stripe.paymentIntents.retrieve(pi_id);
+  // async refundUser(pi_id: string) {
+  //   const paymentIntent = await stripe.paymentIntents.retrieve(pi_id);
 
-    const refund = await stripe.refunds.create({
-      payment_intent: pi_id,
-      amount: paymentIntent.amount,
-    });
+  //   const refund = await stripe.refunds.create({
+  //     payment_intent: pi_id,
+  //     amount: paymentIntent.amount,
+  //   });
 
-    if (refund.status === "succeeded") {
-      return refund.id;
-    } else {
-      throw new Error(`Refund failed with status: ${refund.status}`);
-    }
-  },
+  //   if (refund.status === "succeeded") {
+  //     return refund.id;
+  //   } else {
+  //     throw new Error(`Refund failed with status: ${refund.status}`);
+  //   }
+  // },
 
   async updateUserSuccessfulPaymentStatus(userSk: string, pi_id: string) {
     const input = {

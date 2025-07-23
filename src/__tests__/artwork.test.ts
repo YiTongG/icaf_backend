@@ -1,10 +1,14 @@
 import request from 'supertest';
 import { app } from '../index';
 import { users } from '../models/user';
+import { ddbDocClient } from '../lib/dynamoDBClient'; // Import the REAL client
+import { GetCommand } from '@aws-sdk/lib-dynamodb';
+import { mockClient } from 'aws-sdk-client-mock';
 
 jest.mock('uuid', () => ({
   v4: jest.fn(() => '123e4567-e89b-12d3-a456-426614174000'),
 }));
+const ddbMock = mockClient(ddbDocClient);
 
 describe('Artwork API Tests', () => {
   let testArtworkSk = '';
@@ -39,6 +43,10 @@ describe('Artwork API Tests', () => {
       .post('/api/artworks')
       .send(validArtwork);
   });
+  beforeEach(() => {
+    ddbMock.reset();
+  });
+
 
   test('POST /api/artworks - should create artwork', async () => {
     const res = await request(app)
@@ -73,10 +81,31 @@ describe('Artwork API Tests', () => {
   });
 
   test('PATCH /api/vote/:artworkSk - should add a vote', async () => {
-    const res = await request(app)
-      .patch(`/api/vote/${testArtworkSk}`)
-      .send({ userSk: 'user-1234' }); // adjust to match your logic
-    expect(res.statusCode).toBe(200);
+    // const res = await request(app)
+    //   .patch(`/api/vote/${testArtworkSk}`)
+    //   .send({ userSk: 'user-1234' }); // adjust to match your logic
+    // expect(res.statusCode).toBe(200);
+
+       ddbMock.on(GetCommand).resolves({
+          Item: users[testUserSk],
+        });
+    
+        // ACT: Call the API endpoint.
+        // The controller for this endpoint will call `getUserBySk`, which in turn
+        // calls `ddbDocClient.send()`. Our mock will intercept that call.
+        const res = await request(app)
+          .patch(`/api/vote/${testArtworkSk}`)
+          .send({ userSk: testUserSk });
+    
+        // ASSERT: Verify the result.
+        expect(res.statusCode).toBe(200);
+    
+        // Verify that the database was queried correctly.
+        const sentCommand = ddbMock.commandCalls(GetCommand)[0].args[0].input;
+        expect(sentCommand.Key).toEqual({
+          pk: 'USER',
+          sk: testUserSk
+      });
   });
 
   test('DELETE /api/artworks/:artworkSk - should delete artwork', async () => {

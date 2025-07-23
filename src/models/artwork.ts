@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-
+import { VoteModel } from './votes';
 export const artworks: Record<string, any> = {};
 export const userVotes: Record<string, string> = {};
 let totalVotes = 0;
@@ -44,14 +44,14 @@ export const ArtworkModel = {
   async incrementVoteArtworkById(artworkSk: string) {
     if (!artworks[artworkSk]) throw new Error('Artwork not found');
     artworks[artworkSk].votes = (artworks[artworkSk].votes || 0) + 1;
-    totalVotes += 1;
+    VoteModel.incrementTotalVotes();
     return { Attributes: artworks[artworkSk] };
   },
 
   async decrementVoteArtworkById(artworkSk: string) {
     if (!artworks[artworkSk]) throw new Error('Artwork not found');
     artworks[artworkSk].votes = Math.max((artworks[artworkSk].votes || 0) - 1, 0);
-    totalVotes = Math.max(totalVotes - 1, 0);
+    VoteModel.decrementTotalVotes();
     return { Attributes: artworks[artworkSk] };
   },
 

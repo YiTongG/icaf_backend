@@ -8,7 +8,7 @@ type GetTotalVotesResult = {
 
 export class VotesService {
   static async getTotalVotes(): Promise<{ votes: number }> {
-    const result: GetTotalVotesResult = await ArtworkModel.getTotalVotes();
+    const result: GetTotalVotesResult = await VoteModel.getTotalVotes();
     const votes = result.Item?.votes ?? 0;
     return { votes };
   }

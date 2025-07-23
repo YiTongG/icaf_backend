@@ -136,29 +136,29 @@ export const getVolunteerAuthStatus = async (req: Request, res: Response) => {
   }
 };
 
-export const refundUser = async (req: Request, res: Response) => {
-  const userSk = req.params.userSk;
+// export const refundUser = async (req: Request, res: Response) => {
+//   const userSk = req.params.userSk;
 
-  if (!req.cookies.accessToken) {
-    res.status(401).json({ error: "No access token provided" });
-    return;
-  }
+//   if (!req.cookies.accessToken) {
+//     res.status(401).json({ error: "No access token provided" });
+//     return;
+//   }
 
-  try {
-    const userCognitoData = await getUserCognitoData(req.cookies.accessToken);
-    const userNick = userCognitoData.nickname;
+//   try {
+//     const userCognitoData = await getUserCognitoData(req.cookies.accessToken);
+//     const userNick = userCognitoData.nickname;
 
-    if (userNick === "Volunteer") {
-      const result = await UserService.refundUser(userSk);
-      res.status(200).json(result);
-    } else {
-      res.status(403).json({ error: "User is not authenticated as a volunteer." });
-    }
-  } catch (error) {
-    console.error("Error getting user Cognito data:", error);
-    res.status(500).json({ error: "Error authenticating user" });
-  }
-};
+//     if (userNick === "Volunteer") {
+//       const result = await UserService.refundUser(userSk);
+//       res.status(200).json(result);
+//     } else {
+//       res.status(403).json({ error: "User is not authenticated as a volunteer." });
+//     }
+//   } catch (error) {
+//     console.error("Error getting user Cognito data:", error);
+//     res.status(500).json({ error: "Error authenticating user" });
+//   }
+// };
 
 export const login = async (req: Request, res: Response) => {
   const { email, password } = req.body;
