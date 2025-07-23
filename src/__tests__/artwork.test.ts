@@ -36,9 +36,9 @@ describe('Artwork API Tests', () => {
       email: 'test@example.com',
       can_submit_art: true,
       has_active_submission: false,
-      voted_sk: '', 
+      voted_sk: '',
     };
-  
+
     await request(app)
       .post('/api/artworks')
       .send(validArtwork);
@@ -52,7 +52,7 @@ describe('Artwork API Tests', () => {
     const res = await request(app)
       .post('/api/artworks')
       .send(validArtwork);
-  
+
     expect(res.statusCode).toBe(201);
     expect(res.body).toHaveProperty('message');
   });
@@ -81,31 +81,22 @@ describe('Artwork API Tests', () => {
   });
 
   test('PATCH /api/vote/:artworkSk - should add a vote', async () => {
-    // const res = await request(app)
-    //   .patch(`/api/vote/${testArtworkSk}`)
-    //   .send({ userSk: 'user-1234' }); // adjust to match your logic
-    // expect(res.statusCode).toBe(200);
+    ddbMock.on(GetCommand).resolves({
+      Item: users[testUserSk],
+    });
+    // The controller for this endpoint will call `getUserBySk`, which in turn
+    // calls `ddbDocClient.send()`. Our mock will intercept that call.
+    const res = await request(app)
+      .patch(`/api/vote/${testArtworkSk}`)
+      .send({ userSk: testUserSk });
 
-       ddbMock.on(GetCommand).resolves({
-          Item: users[testUserSk],
-        });
-    
-        // ACT: Call the API endpoint.
-        // The controller for this endpoint will call `getUserBySk`, which in turn
-        // calls `ddbDocClient.send()`. Our mock will intercept that call.
-        const res = await request(app)
-          .patch(`/api/vote/${testArtworkSk}`)
-          .send({ userSk: testUserSk });
-    
-        // ASSERT: Verify the result.
-        expect(res.statusCode).toBe(200);
-    
-        // Verify that the database was queried correctly.
-        const sentCommand = ddbMock.commandCalls(GetCommand)[0].args[0].input;
-        expect(sentCommand.Key).toEqual({
-          pk: 'USER',
-          sk: testUserSk
-      });
+    expect(res.statusCode).toBe(200);
+
+    const sentCommand = ddbMock.commandCalls(GetCommand)[0].args[0].input;
+    expect(sentCommand.Key).toEqual({
+      pk: 'USER',
+      sk: testUserSk
+    });
   });
 
   test('DELETE /api/artworks/:artworkSk - should delete artwork', async () => {
